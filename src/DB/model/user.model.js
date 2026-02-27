@@ -1,6 +1,6 @@
   export const users =[]
   import mongoose from "mongoose"
-  import { GenderEnum ,providerEnum} from "../../common/enums/index.js"
+  import { GenderEnum ,providerEnum,RoleEnum} from "../../common/enums/index.js"
   const  userSchema = new mongoose.Schema({
 firstName:{
     type:String,
@@ -21,7 +21,9 @@ firstName:{
 
  password:{
 type:String,
-required: true
+required: function(){
+  return this.provider === providerEnum.system
+}
  },
 phone:String,
 confirmEmail:Date,
@@ -43,6 +45,11 @@ coverProfilePicture:[String],
 },
 otpExpiry: {
   type: Date,
+},
+role:{
+  type:Number,
+  enum:Object.values(RoleEnum),
+  default:RoleEnum.User
 }
 
   },{

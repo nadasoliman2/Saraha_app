@@ -4,10 +4,11 @@ import { authRouter, userRouter} from './modules/index.js'
 import express from 'express'
 import { authenticationDB } from './DB/index.js'
 import { globalErrorHandling } from './common/utils/index.js'
- async  function  bootstrap() {
+import cors from 'cors'
+async  function  bootstrap() {
     const app = express()
     //convert buffer data
-    app.use(express.json())
+    app.use(express.json(),cors())
     await authenticationDB()
     //application routing
     app.get('/', (req, res) => res.send('Hello World!'))

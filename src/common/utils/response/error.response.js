@@ -17,4 +17,10 @@ export const ConfilctException = ({message="conflict",extra=undefined}={})=>{
 export const NotFoundException = ({message="NotFound",extra=undefined})=>{
     return ErrorException({message,status:404 ,extra})
 
+
+}
+export const unauthorizedException = ({message="Unauthorized",extra=undefined})=>{
+    return ErrorException({message,status:401 ,extra})
+
+    
 }

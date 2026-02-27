@@ -7,3 +7,8 @@ export const GenderEnum = {
    system:0
 
     }
+     export const RoleEnum = {
+  User:0,
+  Admin:1
+
+    }
