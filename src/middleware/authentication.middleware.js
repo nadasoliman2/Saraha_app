@@ -16,11 +16,11 @@ throw unauthorizedException({message:"Missing authentication credentials"})
          const [email , password] = Buffer.from(credentials,'base64')?.toString()?.split(":") ||[]
             await login({email,password},`${req.protocol}://${req.host}`)
             break;
-          case "Bearer":
-          req.user = await  decodeToken({token:credentials,tokenType})
-           break
+       
         default:
-        throw ErrorException({message:"Invalid authentication schema"})
+const {user , decoded}= await  decodeToken({token:credentials,tokenType})
+          req.user = user;
+          req.decoded = decoded
             break;
     }
     next()

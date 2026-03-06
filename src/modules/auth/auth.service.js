@@ -7,7 +7,7 @@ import {OAuth2Client} from 'google-auth-library'
 import { providerEnum } from "../../common/enums/index.js";
 const helper = new NodemailerHelper(EMAIL_USER, EMAIL_PASS);
 export const signup = async (inputs) => {
-  const { username, email, password, phone } = inputs;
+  const { username, email, password, phone , gender,age} = inputs;
 
   const checkuserExist = await findOne({
     model: UserModel,
@@ -26,9 +26,12 @@ const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
   const payload = {
     firstName,
+     gender : gender==="male"? 1 : 2
+     ,
     lastName,
     username,
     email,
+    age,
     password: await generateHash({ plaintext: password }),
     phone: await encrypt(phone),  
     otp,
@@ -60,7 +63,7 @@ const verifyGoogleAccount = async (idToken)=>{
   }
 return payload
 }
-export const signupwithgmail = async (idToken,issuer) => {
+export const signupwithgmail = async (idToken,issuer) => { 
 const payload = await verifyGoogleAccount(idToken);
 console.log(payload)
 const checkuserExist = await findOne({model:UserModel,filter:{email:payload.email}})

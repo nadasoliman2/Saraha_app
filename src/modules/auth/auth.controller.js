@@ -1,13 +1,21 @@
 import { Router } from 'express'
 import {  signup , login, verify, signupwithgmail } from './auth.service.js';
-import { successResponse } from '../../common/utils/index.js';
+import { successResponse , ErrorException} from '../../common/utils/index.js';
+import { validation } from '../../middleware/index.js';
+import * as  validators from './auth.validation.js';
 const router = Router(); 
-router.post("/signup", async (req, res, next) => {
-    const result = await signup(req.body)
 
-    return successResponse({res,status: 201,data:{result}})
+router.post("/signup",validation(validators.signup),
+async (req, res, next) => {
+
+     const result = await signup(req.body)
+
+    return successResponse({res,status: 201,data:{result:result._doc}})
+
+
 })
-router.post("/login", async (req, res, next) => {
+
+router.post("/login" ,validation(validators.login), async (req, res, next) => {
     console.log(`${req.protocol}://${req.host}`)
     const result = await login(req.body,`${req.protocol}://${req.host}`)
     return successResponse({res,status: 200,data:{token:result}})

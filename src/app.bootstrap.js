@@ -5,10 +5,13 @@ import express from 'express'
 import { authenticationDB } from './DB/index.js'
 import { globalErrorHandling } from './common/utils/index.js'
 import cors from 'cors'
+import { resolve } from 'node:path'
 async  function  bootstrap() {
     const app = express()
     //convert buffer data
     app.use(express.json(),cors())
+app.use("/uploads",express.static(resolve('../uploads')))
+
     await authenticationDB()
     //application routing
     app.get('/', (req, res) => res.send('Hello World!'))

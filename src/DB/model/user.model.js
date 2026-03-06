@@ -1,6 +1,7 @@
   export const users =[]
   import mongoose from "mongoose"
   import { GenderEnum ,providerEnum,RoleEnum} from "../../common/enums/index.js"
+
   const  userSchema = new mongoose.Schema({
 firstName:{
     type:String,
@@ -25,6 +26,8 @@ required: function(){
   return this.provider === providerEnum.system
 }
  },
+
+
 phone:String,
 confirmEmail:Date,
 gender:{
@@ -38,7 +41,31 @@ enum:Object.values(providerEnum),
 default:providerEnum.system
 },
 changeCredentialsTime:Date,
-coverProfilePicture:[String],
+  coverProfilePicture: {
+    type: [
+      {
+        url: { type: String }
+      }
+    ],
+    validate: {
+      validator: v => v.length  <= 2,
+      message: "coverProfilePicture must contain exactly 2 images"
+    }
+  },
+  Gallery: {
+    type: [
+      {
+        url: { type: String }
+      }
+    ],
+  
+  }
+,
+visitCount: {
+  type: Number,
+  default: 0
+}
+,
  profilePicture:String,
  otp: {
   type: String,
@@ -50,11 +77,13 @@ role:{
   type:Number,
   enum:Object.values(RoleEnum),
   default:RoleEnum.User
-}
+},
+changeCreadentialsTime:Date
 
   },{
     collection:"Route_Users",
   timestamps:true,
+
   toJSON:{
     virtuals:true,
     transform:(doc,ret)=>{
