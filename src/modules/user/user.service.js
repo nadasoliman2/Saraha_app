@@ -7,6 +7,8 @@ import {RoleEnum } from "../../common/enums/user.enum.js"
 import { access_token_expires_in, refresh_token_expires_in } from "../../../config/config.service.js";
 import fs from "fs";
 import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 export const logout = async({flag},user,{jti,iat})=>{
     let status = 200
     switch(flag){
@@ -42,9 +44,10 @@ export const deleteprofileImage = async(user)=>{
    if (!user.profilePicture) {
     throw NotFoundException({ message: "Not found profile image found" });
   }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-  const filePath = path.join("D:", "back", "mongose", user.profilePicture);
-
+const filePath = path.join(__dirname, "..", "uploads", "users", user.profilePicture);
   try {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath); 
