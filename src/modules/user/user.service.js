@@ -10,7 +10,6 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import {set,revokeTokenKey,deleteKey,Keys,baseRevokeTokenKey} from '../../common/services/index.js'
-
 export const updatePassword = async ({ oldPassword, password }, user, issuer) => {
 
   if (!await compareHash({
@@ -133,8 +132,17 @@ export const deleteprofilecoverImage = async (user, photoId) => {
   return user;
 };
 export const profile   =async (user )=>{
+const payload = {
+  id:user._id,
+  phone: await decrypt(user.phone),
+  role: user.role == 0 ?"user":"admin",
+        coverProfilePicture:user.coverProfilePicture,
+Gallery: user.Gallery,
+username:user.username,
+profilePicture:user?.profilePicture
 
-    return user
+}
+    return payload
 }
 export const rotateToken =async (user, {sub,jti,iat} ,issuer )=>{
     if((iat + access_token_expires_in ) * 1000 >= Date.now() + (30000) ){

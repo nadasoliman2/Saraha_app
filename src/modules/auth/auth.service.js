@@ -66,7 +66,7 @@ await incr(trialKey)
 
 }
 export const signup = async (inputs) => {
-  const { username, email, password, phone , gender,age} = inputs;
+  const { username, email, password, phone , gender,age ,role} = inputs;
 
   const checkuserExist = await findOne({
     model: UserModel,
@@ -92,7 +92,8 @@ export const signup = async (inputs) => {
     email,
     age,
     password: await generateHash({ plaintext: password }),
-    phone: await encrypt(phone)
+    phone: await encrypt(phone),
+    role:inputs?.role === "user"?0:1
   };
 
   const user = await UserModel.create(payload);

@@ -47,7 +47,7 @@ router.patch(
 
   async (req, res, next) => {
     const data = await profileImage(req.file, req.user)
-    return successResponse({ res, data })
+    return successResponse({ res, data:{message:"ProfileImage added succesfully"} })
   }
 )
 router.delete(

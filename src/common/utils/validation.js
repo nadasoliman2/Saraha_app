@@ -3,6 +3,7 @@ import {Types} from "mongoose"
 export const generalValidationFields={
 otp: Joi.string().pattern(new RegExp(/^\d{6}$/)),
  
+  role:  Joi.string().empty("").valid("user", "admin"),
     username: Joi.string().messages({
         "any.required":"username is required",
         "string.empty" : "username cannot be empty"

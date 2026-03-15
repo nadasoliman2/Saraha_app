@@ -19,7 +19,8 @@ export const login ={
     email: generalValidationFields.email.required(),
     gender: generalValidationFields.gender.required(),
     age:   generalValidationFields.age.required(),
-    password:generalValidationFields.password.required()
+    password:generalValidationFields.password.required(),
+    role: generalValidationFields.role
 , confirm_password:generalValidationFields.confirm_password.required(),
 phone:generalValidationFields.phone.required().messages({
     "any.required":"phone number is required",
