@@ -5,6 +5,7 @@ import { TokenTypeEnum } from "../../enums/security.enum.js"
 import { NotFoundException , ErrorException, unauthorizedException} from "../../utils/index.js"
 import { RoleEnum } from "../../enums/user.enum.js"
 import {randomUUID} from 'node:crypto'
+import {get,revokeTokenKey} from '../../services/index.js'
   export const generateToken = async({ payload={},secret=user_access_token_secret,options={}}={}) => {
     return await jwt.sign(payload,secret,options)
   }
@@ -49,7 +50,8 @@ const [tokenApproach , level] = decoded.aud || []
 if(tokenType !== tokenApproach){
 throw ErrorException({message:"unexpected token mechanism we expected"})
 }
-if(decoded.jti && await findOne({model:tokenModel , filter:{jti:decoded.jti}})){
+console.log(decoded.jti)
+if(decoded.jti && await get(revokeTokenKey({ userId: decoded.sub, jti: decoded.jti }))){
       throw unauthorizedException({message:"Invaild login session"})
 
 }
@@ -57,13 +59,13 @@ const secret = await getTokenSignture({tokenType:tokenApproach,level})
 
 const verifyData = jwt.verify(token,secret)
 console.log({ verifyData})
-  const user = await UserModel.findById(sub,{gender:0,email:0,password:0})
+  const user = await UserModel.findById(sub,{gender:0,email:0})
   console.log(user)
 if(!user){
     throw NotFoundException({message:"user not found"})
 }
-console.log({changecredentails:user.changeCreadentialsTime?.getTime() , tokenIat:decoded.iat * 1000})
-if(user.changeCreadentialsTime && user.changeCreadentialsTime?.getTime() >= decoded.iat * 1000){
+console.log({changecredentails:user.changeCredentialsTime?.getTime() , tokenIat:decoded.iat * 1000})
+if(user.changeCredentialsTime && user.changeCredentialsTime?.getTime() >= decoded.iat * 1000){
     throw unauthorizedException({message:"Invaild login session"})
 
 }

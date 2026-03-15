@@ -1,6 +1,6 @@
 import { UserModel , tokenModel } from "../../DB/model/index.js"
 import { createloginCredentials } from "../../common/utils/security/token.security.js";
-import { ConfilctException, ErrorException, NotFoundException , decrypt} from "../../common/utils/index.js"
+import { ConfilctException, ErrorException, NotFoundException , compareHash, decrypt, generateHash} from "../../common/utils/index.js"
 import { LogoutEnum } from "../../common/enums/security.enum.js";
 import { createOne } from "../../DB/database.repository.js";
 import {RoleEnum } from "../../common/enums/user.enum.js"
@@ -9,24 +9,63 @@ import fs from "fs";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-export const logout = async({flag},user,{jti,iat})=>{
+import {set,revokeTokenKey,deleteKey,Keys,baseRevokeTokenKey} from '../../common/services/index.js'
+
+export const updatePassword = async ({ oldPassword, password }, user, issuer) => {
+
+  if (!await compareHash({
+    plaintext: oldPassword,
+    cipherText: user.password
+  })) {
+    throw ConfilctException({ message: "invalid old password" })
+  }
+
+  // check if password used before
+  for (const hash of user.oldPassword || []) {
+    if (await compareHash({
+      plaintext: password,
+      cipherText: hash
+    })) {
+      throw ConfilctException({ message: "this password is already used before" })
+    }
+  }
+
+  user.oldPassword.push( await generateHash({ plaintext: oldPassword }))
+
+ 
+  user.password = await generateHash({ plaintext: password })
+
+  user.changeCredentialsTime = new Date()
+
+  await user.save()
+
+  await deleteKey(await Keys(baseRevokeTokenKey(user.id)))
+
+  return await createloginCredentials(user, issuer)
+}
+export const logout = async({flag},user,{jti,iat , sub})=>{
     let status = 200
     switch(flag){
         case LogoutEnum.All:
               user.changeCreadentialsTime =  Date.now();
     await user.save();
-    await tokenModel.deleteMany({userId :user._id})
-
+    await  deleteKey(await Keys(baseRevokeTokenKey(sub)))
             break;
             default:
-                await 
-                  tokenModel.create({
+                // await 
+                //   tokenModel.create({
                     
-                        userId: user._id,
-                        jti,
-                          expiresIn: new Date((iat + refresh_token_expires_in) *1000)
+                //         userId: user._id,
+                //         jti,
+                //           expiresIn: new Date((iat + refresh_token_expires_in) *1000)
                     
-                })
+                // })
+                // status=201
+await set({
+  key: revokeTokenKey({ userId: sub, jti }),
+  value: jti,
+  ttl: iat + refresh_token_expires_in
+})
                 status=201
                 break;
     }
@@ -97,18 +136,16 @@ export const profile   =async (user )=>{
 
     return user
 }
-export const rotateToken =async (user, {jti,iat} ,issuer )=>{
+export const rotateToken =async (user, {sub,jti,iat} ,issuer )=>{
     if((iat + access_token_expires_in ) * 1000 >= Date.now() + (30000) ){
  throw ConfilctException({message:"Current access token still valid"})
 
     }
-  await  tokenModel.create({
-                    
-                        userId: user._id,
-                        jti,
-                          expiresIn: new Date((iat + refresh_token_expires_in) *1000)
-                    
-                })
+await set({
+  key: revokeTokenKey({ userId: sub, jti }),
+  value: jti,
+  ttl: iat + refresh_token_expires_in
+})
   return createloginCredentials(user,issuer)
 }
 export const updateprofile = async(id,inputs)=>{

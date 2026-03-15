@@ -14,7 +14,7 @@ config({ path: resolve(`./config/${envPath[NODE_ENV]}`) })
 
 
 export const port = process.env.PORT ?? 7000
-
+export const APPLICATION_NAME = process.env.APPLICATION_NAME
 export const DB_URL =process.env.DB_URL
 export const EMAIL_USER = process.env.EMAIL_USER
 export const EMAIL_PASS = process.env.EMAIL_PASS
@@ -26,6 +26,7 @@ export const system_access_token_secret = process.env.system_access_token_secret
 export const refresh_system_token_secret = process.env.refresh_system_token_secret
 export const access_token_expires_in =parseInt(process.env.access_token_expires_in)
 export const refresh_token_expires_in =parseInt(process.env.refresh_token_expires_in)
-
+export const REDIS_URI = process.env.REDIS_URI
+export const ORIGINS = process.env.ORIGINS?.split(",") ||[]
 export const SALT_ROUND = parseInt(process.env.SALT_ROUND ?? '10')
 console.log({SALT_ROUND});

@@ -29,3 +29,23 @@ phone:generalValidationFields.phone.required().messages({
 }).required(),
 query: Joi.object().keys({ lang:Joi.string().valid("en","ar").default("en")}).required()
  }
+ export const confirmEmail={
+ body: Joi.object().keys({
+ email: generalValidationFields.email.required(),
+  
+   otp:generalValidationFields.otp.required()
+})
+ }
+  export const resendconfirmEmail={
+ body: Joi.object().keys({
+ email: generalValidationFields.email.required()})
+ }
+  export const resetforgotpassord={
+ body: Joi.object().keys({
+     password:generalValidationFields.password.required(),
+     confirm_password:generalValidationFields.confirm_password.required(),
+     email: generalValidationFields.email.required(),
+  
+   otp:generalValidationFields.otp.required()
+})
+ }

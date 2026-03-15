@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { profile,updateprofile ,  deleteprofileImage ,rotateToken,shareProfile,profileImage,profilecoverImage , logout ,deleteprofilecoverImage } from "./user.service.js";
+import { profile,updateprofile, updatePassword ,  deleteprofileImage ,rotateToken,shareProfile,profileImage,profilecoverImage , logout ,deleteprofilecoverImage } from "./user.service.js";
 import { successResponse , localFileUpload} from "../../common/utils/index.js";
 import { authentication ,authorization} from "../../middleware/authentication.middleware.js";
 import {TokenTypeEnum} from '../../common/enums/index.js'
@@ -7,6 +7,7 @@ import { RoleEnum } from "../../common/enums/index.js";
 import { validation } from "../../middleware/validation.middleware.js";
 import * as validators from "./user.validation.js";
 import { fileFieldValidation } from "../../common/utils/multer/index.js";
+import { deleteKey ,Keys,baseRevokeTokenKey} from "../../common/services/redis.service.js";
 const router=Router()
 
 router.get("/" ,
@@ -16,6 +17,13 @@ router.get("/" ,
     async (req,res,next)=>{
     const account = await profile(req.user)
     return successResponse({res,data:{account}})
+})
+router.patch("/password" ,
+    authentication(),
+    validation(validators.updatePassord),
+    async (req,res,next)=>{
+    const credentials = await updatePassword(req.body,req.user, `${req.protocol}://${req.host}`)
+    return successResponse({res,data:{...credentials}})
 })
 router.post('/logout',authentication(),async(req,res,next)=>{
     const status = await logout(req.body, req.user, req.decoded)
@@ -85,7 +93,7 @@ router.get("/:userId/share-profile" ,
   authentication()  ,
     async (req,res,next)=>{
         const {userId} = req.params;
-    const account = await shareProfile(userId ,req.user)
+    const credentials = await shareProfile(userId ,req.user)
     return successResponse({res,data:{account}})
 })
 export default router 

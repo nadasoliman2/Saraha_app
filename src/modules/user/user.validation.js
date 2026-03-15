@@ -3,11 +3,17 @@ import {Types} from "mongoose"
 import { fileFieldValidation } from "../../common/utils/index.js";
 import { generalValidationFields } from "../../common/utils/validation.js";
 export const shareprofile = {
-    params:Joi.object({
+    params:Joi.object().keys({
    userId :generalValidationFields.id.required()     
     })
 }
-
+export const updatePassord = {
+    body:Joi.object().keys({
+        oldPassword:generalValidationFields.password.required(),
+        password:generalValidationFields.password.not(Joi.ref('oldPassword')).required(),
+        confirmPassword:generalValidationFields.confirm_password.required()
+    }).required()
+}
 export const profileImage ={
     File:generalValidationFields.file(fileFieldValidation.Image)
 }

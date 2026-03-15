@@ -1,7 +1,7 @@
 import Joi from "joi";
 import {Types} from "mongoose"
 export const generalValidationFields={
-
+otp: Joi.string().pattern(new RegExp(/^\d{6}$/)),
  
     username: Joi.string().messages({
         "any.required":"username is required",
@@ -24,6 +24,7 @@ id: Joi.string().custom((value, helpers) => {
 
     return Types.ObjectId.isValid(value) ? value : helpers.message("invalid objectId");
    }),
+
    file:function(validation =[]){
     return  Joi.object().keys({
             "fieldname":Joi.string().required(),

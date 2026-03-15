@@ -26,8 +26,8 @@ required: function(){
   return this.provider === providerEnum.system
 }
  },
-
-
+oldPassword:[String]
+,
 phone:String,
 confirmEmail:Date,
 gender:{
@@ -78,8 +78,7 @@ role:{
   enum:Object.values(RoleEnum),
   default:RoleEnum.User
 },
-changeCreadentialsTime:Date
-
+changeCredentialsTime: Date
   },{
     collection:"Route_Users",
   timestamps:true,

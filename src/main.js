@@ -1,4 +1,4 @@
 import bootstrap from "./app.bootstrap.js";
-import { encrypt } from "./common/utils/security/encryption.security.js";
+import {createNumberOtp} from '../src/common/utils/index.js'
 bootstrap()
-console.log(encrypt("lol"))
+
