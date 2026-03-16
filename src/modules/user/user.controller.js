@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { profile,updateprofile, updatePassword ,  deleteprofileImage ,rotateToken,shareProfile,profileImage,profilecoverImage , logout ,deleteprofilecoverImage } from "./user.service.js";
-import { successResponse , localFileUpload} from "../../common/utils/index.js";
+import { successResponse , cloudFileUpload} from "../../common/utils/index.js";
 import { authentication ,authorization} from "../../middleware/authentication.middleware.js";
 import {TokenTypeEnum} from '../../common/enums/index.js'
 import { RoleEnum } from "../../common/enums/index.js";
@@ -39,15 +39,15 @@ router.post("/rotate-token" ,
 router.patch(
   '/profile-image',
   authentication(),
-  localFileUpload({
-    customPath: "users/profile",
+  cloudFileUpload({
+  
     validation: fileFieldValidation.Image
   }).single("attachment"),
   validation(validators.profileImage),
 
   async (req, res, next) => {
     const data = await profileImage(req.file, req.user)
-    return successResponse({ res, data:{message:"ProfileImage added succesfully"} })
+    return successResponse({ res, data})
   }
 )
 router.delete(
@@ -63,10 +63,9 @@ router.delete(
 router.patch(
   '/profile-cover-image',
   authentication(),
-  localFileUpload({
-    customPath: "users/profile/cover",
+  cloudFileUpload({
     validation: fileFieldValidation.Image
-  }).array("attachments"),
+  }).array("cover"),
  validation(validators.profilecoverImage),
   async (req, res, next) => {
 

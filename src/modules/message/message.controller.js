@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { successResponse ,BadRequestException, localFileUpload ,fileFieldValidation } from '../../common/utils/index.js';
+import { successResponse ,BadRequestException, cloudFileUpload ,fileFieldValidation } from '../../common/utils/index.js';
 import {sendmessage,getMessage,getMessages, deleteMessage} from './message.service.js'
 import * as validators from './message.validation.js'
 import { validation } from '../../middleware/validation.middleware.js';
@@ -44,7 +44,7 @@ const {user , decoded}= await  decodeToken({token:req.headers.authorization.spli
 }
 next()
 },
-    localFileUpload({validation:fileFieldValidation.Image , 
+    cloudFileUpload({validation:fileFieldValidation.Image , 
         customPath:"Messages",
         maxSize:1
     }).array("attachments",2),

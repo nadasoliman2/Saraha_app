@@ -35,8 +35,8 @@ id: Joi.string().custom((value, helpers) => {
             "size":Joi.number().required(),
             "destination":Joi.string().required(),
             "filename":Joi.string().required(),
-            "path":Joi.string().required(),
-            "finalPath":Joi.string().required()
+            "path":Joi.string().required()
+            // "finalPath":Joi.string().required()
         })
     }}
 

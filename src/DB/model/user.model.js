@@ -2,6 +2,7 @@
   import mongoose from "mongoose"
   import { GenderEnum ,providerEnum,RoleEnum} from "../../common/enums/index.js"
 
+
   const  userSchema = new mongoose.Schema({
 firstName:{
     type:String,
@@ -41,17 +42,7 @@ enum:Object.values(providerEnum),
 default:providerEnum.system
 },
 changeCredentialsTime:Date,
-  coverProfilePicture: {
-    type: [
-      {
-        url: { type: String }
-      }
-    ],
-    validate: {
-      validator: v => v.length  <= 2,
-      message: "coverProfilePicture must contain exactly 2 images"
-    }
-  },
+  coverProfilePicture: [{secure_url:String ,public_id:String}],
   Gallery: {
     type: [
       {
@@ -66,7 +57,7 @@ visitCount: {
   default: 0
 }
 ,
- profilePicture:String,
+ profilePicture:{secure_url:String ,public_id:String},
  otp: {
   type: String,
 },

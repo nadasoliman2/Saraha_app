@@ -10,6 +10,7 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import {set,revokeTokenKey,deleteKey,Keys,baseRevokeTokenKey} from '../../common/services/index.js'
+import { cloud,uploadFile,uploadFiles,destroy } from "../../common/utils/multer/cloudinary.js";
 export const updatePassword = async ({ oldPassword, password }, user, issuer) => {
 
   if (!await compareHash({
@@ -73,29 +74,19 @@ await set({
 }
 
 export const profileImage   =async (file,user )=>{
-user.Gallery.push({ url: user.profilePicture });
-user.profilePicture= file.finalPath
+     const {secure_url ,public_id} =await uploadFile({file:file.path , path:`user/${user.id}`})
+if (user.profilePicture?.secure_url) {
+user.Gallery.push({ url: user.profilePicture.secure_url });
+}
+user.profilePicture= {secure_url ,public_id}
 await user.save()
-    return user
+    return {user}
 }
 export const deleteprofileImage = async(user)=>{
    if (!user.profilePicture) {
     throw NotFoundException({ message: "Not found profile image found" });
   }
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const filePath = path.join(__dirname, "..", "uploads", "users", user.profilePicture);
-  try {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath); 
-      console.log("Profile image deleted from disk");
-    } else {
-      console.warn("File not found on disk, skipping deletion");
-    }
-  } catch (err) {
-    console.error("Failed to delete profile image:", err);
-  }
+ await destroy({ public_id: user.profilePicture.public_id });
 
   user.profilePicture = null;
   await user.save();
@@ -104,16 +95,22 @@ const filePath = path.join(__dirname, "..", "uploads", "users", user.profilePict
   return user;
 
 }
-export const profilecoverImage   =async (files,user )=>{
-    if(user.coverProfilePicture.length ===2){
-   throw ConfilctException({message:"you must remove atleast photo" })
+export const profilecoverImage = async (files, user) => {
+
+    if(user.coverProfilePicture.length === 2){
+        throw ConfilctException({ message:"you must remove atleast photo" })
     }
- user.coverProfilePicture = files.map(file => ({
-  url: file.finalPath
-}))
+
+    const attachments = await uploadFiles({
+        files,
+        path:`user/${user.id}/cover`
+    })
+
+    user.coverProfilePicture.push(...attachments)
 
     await user.save()
-        return user
+
+    return user
 }
 export const deleteprofilecoverImage = async (user, photoId) => {
   const photoIndex = user.coverProfilePicture.findIndex(
@@ -126,6 +123,7 @@ export const deleteprofilecoverImage = async (user, photoId) => {
   const [removedPhoto] = user.coverProfilePicture.splice(photoIndex, 1);
 
 
+  await destroy({ public_id: removedPhoto.public_id });
 
   await user.save();
 
