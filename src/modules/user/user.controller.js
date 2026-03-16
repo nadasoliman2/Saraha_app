@@ -47,7 +47,7 @@ router.patch(
 
   async (req, res, next) => {
     const data = await profileImage(req.file, req.user)
-    return successResponse({ res, data})
+    return successResponse({ res, data:{message:"you added your profile sucessfully"}})
   }
 )
 router.delete(
@@ -70,7 +70,7 @@ router.patch(
   async (req, res, next) => {
 
     const data = await profilecoverImage(req.files, req.user)
-    return successResponse({ res, data :{data:data} })
+    return successResponse({ res, data :{data:{message:"you added your profile cover sucessfully"}} })
   }
 )
 router.delete( '/profile-cover-image/:photoId',

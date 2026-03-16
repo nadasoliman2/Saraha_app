@@ -9,7 +9,7 @@
                 return !this.attachments?.length
             }
         },
-        attachments:{type:[String]},
+        attachments:[{secure_url:String ,public_id:String}],
         receiverId:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User",
