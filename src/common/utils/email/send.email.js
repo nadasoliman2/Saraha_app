@@ -9,9 +9,9 @@ subject,
 attachments=[],
 html}={})=>{ 
     const transporter = nodemailer.createTransport({
-secure:false,
+secure:false ,
 host:EMAIL_HOST,
-port:EMAIL_PORT,
+port:parseInt(EMAIL_PORT),
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,
@@ -27,5 +27,5 @@ port:EMAIL_PORT,
     attachments
   });
 
- 
+   console.log("Email sent:", info.messageId);
 }

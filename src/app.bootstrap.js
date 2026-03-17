@@ -40,7 +40,7 @@ const fromwhere = async (ip)=>{
 }
     const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 10
+	limit: 100
 //  async function(req){
 //     const  {country} = geoip.lookup(req.ip)
 //     console.log(geoip.lookup(req.ip))
