@@ -14,7 +14,8 @@ config({ path: resolve(`./config/${envPath[NODE_ENV]}`) })
 
 export const EMAIL_HOST = process.env.EMAIL_HOST
 export const EMAIL_PORT = process.env.EMAIL_PORT
-
+export const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
+export const SENDGRID_VERIFIED_SENDER = process.env.SENDGRID_VERIFIED_SENDER
 export const port = process.env.PORT ?? 7000
 export const APPLICATION_NAME = process.env.APPLICATION_NAME
 export const DB_URL =process.env.DB_URL
