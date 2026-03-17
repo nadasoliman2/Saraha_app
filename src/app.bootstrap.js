@@ -40,12 +40,12 @@ const fromwhere = async (ip)=>{
 }
     const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit:
- async function(req){
-    const  {country} = geoip.lookup(req.ip)
-    console.log(geoip.lookup(req.ip))
-return country =="EG" ? 5 : 0
- }
+	limit: 10
+//  async function(req){
+//     const  {country} = geoip.lookup(req.ip)
+//     console.log(geoip.lookup(req.ip))
+// return country =="EG" ? 5 : 0
+//  }
 // //    return country_code === "EG" ? 5 : 3
 //     } // Limit each IP to 100 requests per `window` (here, per 15 minutes).
 	,requestPropertyName:"ratelimit",

@@ -12,6 +12,8 @@ console.log({ en: envPath[NODE_ENV] });
 
 config({ path: resolve(`./config/${envPath[NODE_ENV]}`) })
 
+export const EMAIL_HOST = process.env.EMAIL_HOST
+export const EMAIL_PORT = process.env.EMAIL_PORT
 
 export const port = process.env.PORT ?? 7000
 export const APPLICATION_NAME = process.env.APPLICATION_NAME

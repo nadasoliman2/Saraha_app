@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { EMAIL_USER , EMAIL_PASS,APPLICATION_NAME} from "../../../../config/config.service.js"
+import {EMAIL_PORT,EMAIL_HOST, EMAIL_USER , EMAIL_PASS,APPLICATION_NAME} from "../../../../config/config.service.js"
 
 export const sendEmail=async({
     to,
@@ -9,7 +9,9 @@ subject,
 attachments=[],
 html}={})=>{ 
     const transporter = nodemailer.createTransport({
-service:"gmail",
+
+host:EMAIL_HOST,
+EMAIL_PORT:EMAIL_PORT,
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,
