@@ -11,7 +11,7 @@ html}={})=>{
     const transporter = nodemailer.createTransport({
 secure:false,
 host:EMAIL_HOST,
-EMAIL_PORT:EMAIL_PORT,
+port:EMAIL_PORT,
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,
