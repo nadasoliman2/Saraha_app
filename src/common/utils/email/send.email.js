@@ -9,7 +9,7 @@ subject,
 attachments=[],
 html}={})=>{ 
     const transporter = nodemailer.createTransport({
-
+secure:false,
 host:EMAIL_HOST,
 EMAIL_PORT:EMAIL_PORT,
   auth: {
