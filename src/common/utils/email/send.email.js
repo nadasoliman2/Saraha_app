@@ -29,7 +29,7 @@ export const sendEmail = async ({ to, cc, bcc, subject, attachments = [], html }
     console.error("Error sending email:", err);
     throw new Error("Failed to send email"); // ده يمنع 500 غير مفسر
   }
-// };
+};
 // import sgMail from "@sendgrid/mail";
 // import { SENDGRID_API_KEY, SENDGRID_VERIFIED_SENDER } from "../../../../config/config.service.js";
 
