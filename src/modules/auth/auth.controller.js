@@ -72,7 +72,7 @@ async (req, res, next) => {
 
      const result = await signup(req.body)
 
-    return successResponse({res,status: 201,data:{result:result._doc}})
+    return successResponse({res,status: 201})
 
 
 })
