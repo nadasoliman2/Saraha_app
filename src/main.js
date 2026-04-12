@@ -1,4 +1,3 @@
-import bootstrap from "./app.bootstrap.js";
-import {createNumberOtp} from '../src/common/utils/index.js'
-bootstrap()
+import app from "./app.bootstrap.js"
 
+export default app

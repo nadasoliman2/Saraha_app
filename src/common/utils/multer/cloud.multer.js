@@ -8,7 +8,7 @@ export const cloudFileUpload =({
     validation =[],
     maxSize=5
 }={})=>{
-    const storage = multer.diskStorage({
+    const storage = multer.memoryStorage({
      
     })
 
