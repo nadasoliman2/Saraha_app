@@ -90,9 +90,9 @@ app.use('/message', messageRouter)
 
 /* -------------------- 404 -------------------- */
 
-app.use('*', (req, res) => {
-  return res.status(404).json({ message: "Invalid application routing" })
-})
+app.get('/*dummy', (req, res, next) => {
+      return  res.status(404).json({message:"Invalid application routing"});
+    });
 
 /* -------------------- Error Handling -------------------- */
 
