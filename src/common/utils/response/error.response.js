@@ -1,22 +1,22 @@
 import { NODE_ENV } from "../../../../config/config.service.js"
 import multer from 'multer'
 export const globalErrorHandling = (error, req, res, next) => {
+  console.error("GLOBAL ERROR:", error); // 👈 مهم جدًا
 
-  let status = error?.cause?.status || 500
- if(error instanceof multer.MulterError){
-  status=400
- }
+  let status = error?.status || error?.statusCode || 500;
+
+  if (error instanceof multer.MulterError) {
+    status = 400;
+  }
+
   return res.status(status).json({
-    error_message:
-      status === 500
-        ? "something went wrong"
-        : error.message,
+    error_message: error.message || "something went wrong",
 
-    extra: error?.cause?.extra,
+    extra: error?.extra || null,
 
     stack: NODE_ENV === "development" ? error.stack : undefined
-  })
-}
+  });
+};
 export const ErrorException = ({
   message = "Fail",
   status = 400,

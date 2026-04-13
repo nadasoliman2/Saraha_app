@@ -13,8 +13,6 @@ const app = express()
 
 /* -------------------- Cached Connections -------------------- */
 
-let dbConnected = false
-let redisConnected = false
 
     await authenticationDB()
   
