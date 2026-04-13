@@ -21,11 +21,17 @@ export const uploadFile =async({file ={},path="general"}={})=>{
 export const destroy = async ({public_id = ""}={})=>{
     return await cloud().uploader.destroy(public_id)
 }
-export const uploadFiles =async({files =[],path="general"}={})=>{
-    const attachments = []
-for(const file of files){
-    const {secure_url , public_id} = await uploadFile({file:file.path , path})
-    attachments.push({secure_url , public_id})
-}
-return attachments
-}
+export const uploadFiles = async ({ files = [], path = "general" } = {}) => {
+  const attachments = [];
+
+  for (const file of files) {
+    const { secure_url, public_id } = await uploadFile({
+      file: file.buffer,   // 👈 أهم تعديل
+      path
+    });
+
+    attachments.push({ secure_url, public_id });
+  }
+
+  return attachments;
+};
