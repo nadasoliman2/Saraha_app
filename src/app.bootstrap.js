@@ -16,17 +16,10 @@ const app = express()
 let dbConnected = false
 let redisConnected = false
 
-const initConnections = async () => {
-  if (!dbConnected) {
     await authenticationDB()
-    dbConnected = true
-  }
-
-  if (!redisConnected) {
+  
     await connectRedis()
-    redisConnected = true
-  }
-}
+
 
 /* -------------------- Utils -------------------- */
 

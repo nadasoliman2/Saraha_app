@@ -73,15 +73,17 @@ await set({
     return status
 }
 
-export const profileImage   =async (file,user )=>{
-     const {secure_url ,public_id} =await uploadFile({file:file.path , path:`user/${user.id}`})
-if (user.profilePicture?.secure_url) {
-user.Gallery.push({ url: user.profilePicture.secure_url });
-}
-user.profilePicture= {secure_url ,public_id}
-await user.save()
-    return {user}
-}
+export const profileImage = async (file, user) => {
+  const { secure_url, public_id } = await uploadFile({
+    file: file.buffer,   // 👈 هنا الرفع الحقيقي
+    path: `user/${user.id}`
+  });
+
+  user.profilePicture = { secure_url, public_id };
+  await user.save();
+
+  return user;
+};
 export const deleteprofileImage = async(user)=>{
    if (!user.profilePicture) {
     throw NotFoundException({ message: "Not found profile image found" });
