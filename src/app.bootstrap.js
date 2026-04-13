@@ -63,10 +63,7 @@ app.use("/uploads", express.static(resolve('uploads')))
 
 /* -------------------- Init connections per cold start -------------------- */
 
-app.use(async (req, res, next) => {
-  await initConnections()
-  next()
-})
+
 
 /* -------------------- Routes -------------------- */
 
