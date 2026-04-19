@@ -1,15 +1,14 @@
 import { UserModel , tokenModel } from "../../DB/model/index.js"
-import { createloginCredentials } from "../../common/utils/security/token.security.js";
+import { createloginCredentials } from  "../../common/utils/security/token.security.js";
 import { ConfilctException, ErrorException, NotFoundException , compareHash, decrypt, generateHash} from "../../common/utils/index.js"
 import { LogoutEnum } from "../../common/enums/security.enum.js";
 import { createOne } from "../../DB/database.repository.js";
 import {RoleEnum } from "../../common/enums/user.enum.js"
-import { access_token_expires_in, refresh_token_expires_in } from "../../../config/config.service.js";
+import { access_token_expires_in,  } from "../../../config/config.service.js";
 import fs from "fs";
 import path from "path";
 import { dirname } from "path";
-import { fileURLToPath } from "url";
-import {set,revokeTokenKey,deleteKey,Keys,baseRevokeTokenKey} from '../../common/services/index.js'
+ import {set,revokeTokenKey,deleteKey,Keys,baseRevokeTokenKey} from '../../common/services/index.js'
 import { cloud,uploadFile,uploadFiles,destroy } from "../../common/utils/multer/cloudinary.js";
 export const updatePassword = async ({ oldPassword, password }, user, issuer) => {
 

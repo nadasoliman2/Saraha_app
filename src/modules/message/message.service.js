@@ -26,7 +26,7 @@ async(receiverid , {content=undefined}={},files, user)=>
     content,
     receiverId: receiverid,
     attachments,
-    senderId: user ?user._id :undefined
+    senderId: user?._id ?? null
 })
     return  message
 }

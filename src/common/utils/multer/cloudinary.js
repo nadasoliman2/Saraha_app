@@ -23,7 +23,7 @@ export const uploadFile = async ({ file, path = "general" } = {}) => {
       }
     );
 
-    stream.end(file); // 👈 buffer هنا
+    stream.end(file); 
   });
 };
 export const destroy = async ({public_id = ""}={})=>{
