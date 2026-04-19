@@ -4,31 +4,33 @@ import { NotFoundException } from '../../common/utils/index.js'
 import { cloud,uploadFile,uploadFiles,destroy } from "../../common/utils/multer/cloudinary.js";
 
 export const sendmessage =
-async(receiverid , {content=undefined}={},files, user)=>
-{
-    const account = await findOne(
-        {
-            model:UserModel,
-            filter:{_id :receiverid , confirmEmail:{$exists:true}}
-        }
-    )
+async (receiverid , {content = undefined} = {} , files , user) => {
+
+    const account = await findOne({
+        model: UserModel,
+        filter:{ _id: receiverid , confirmEmail: { $exists: true } }
+    })
+
     if(!account){
         throw NotFoundException("Fail to find matching receiver account")
     }
+
+    const senderId = user?._id ?? null
+    const senderFolder = user?._id ?? "anonymous"
+
     const attachments = await uploadFiles({
         files,
-        path:`message/${user.id}/attachment`
+        path:`message/${senderFolder}/attachment`
     })
 
-  
+    const message = await MessageModel.create({
+        content,
+        receiverId: receiverid,
+        attachments,
+        senderId
+    })
 
-  const message = await MessageModel.create({
-    content,
-    receiverId: receiverid,
-    attachments,
-    senderId: user?._id ?? null
-})
-    return  message
+    return message
 }
 
 export const getMessage =async(messageId , user)=>{
